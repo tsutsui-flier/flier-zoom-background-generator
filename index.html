@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flier Zoom背景ジェネレータ</title>
+    <style>
+      /* LINE Seed JP フォントの読み込み */
+      @font-face {
+        font-family: "LINE Seed JP";
+        src: url("font/LINESeedJP_OTF_Bd.otf") format("opentype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "LINE Seed JP";
+        src: url("font/LINESeedJP_OTF_Rg.otf") format("opentype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "LINE Seed JP";
+        src: url("font/LINESeedJP_OTF_Th.otf") format("opentype");
+        font-weight: 300;
+        font-style: normal;
+      }
+    </style>
+    <!-- 外部CSSはインラインスタイルの後に読み込み、Cascadingで上書きできるようにする -->
+    <link rel="stylesheet" href="flieruistyleguide.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--fl-bg-main);
+        min-height: 100vh;
+        padding: var(--sp-40) var(--sp-20);
+        font-family: "LINE Seed JP", -apple-system, BlinkMacSystemFont,
+          sans-serif;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      /* ヘッダー */
+      .header {
+        background-color: var(--fl-blue);
+        color: var(--fl-white);
+        padding: 64px 20px 80px;
+        margin: 0 calc(-1 * var(--sp-20));
+        margin-bottom: 0;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+      }
+
+      .header h1 {
+        font-family: "LINE Seed JP", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.5;
+        letter-spacing: 0.02em;
+      }
+
+      /* 入力フォームエリア */
+      .form-section {
+        background-color: var(--fl-white);
+        padding: var(--sp-48) var(--sp-32);
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 640px;
+        position: relative;
+        padding-bottom: calc(var(--sp-48) + 50px);
+      }
+
+      .arrow-rect-blue {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 74px;
+        height: 50px;
+        background-image: url("img/rectangle_blue.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .instruction {
+        font-size: 14px;
+        color: var(--fl-fore-sub);
+        margin-bottom: var(--sp-32);
+        line-height: 1.7;
+        font-family: "LINE Seed JP", sans-serif;
+      }
+
+      .form-group {
+        margin-bottom: var(--sp-24);
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--fl-fore-main);
+        margin-bottom: var(--sp-8);
+        font-family: "LINE Seed JP", sans-serif;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: var(--sp-12) var(--sp-16);
+        font-size: 15px;
+        border: 1px solid var(--fl-bg-border);
+        border-radius: 4px;
+        font-family: "LINE Seed JP", sans-serif;
+        transition: border-color 0.2s;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--fl-blue);
+      }
+
+      .form-input::placeholder {
+        color: var(--fl-dark-1);
+      }
+
+      .form-hint {
+        font-size: 12px;
+        color: var(--fl-fore-remark);
+        margin-top: var(--sp-4);
+        font-family: "LINE Seed JP", sans-serif;
+      }
+
+      /* プレビュー & ダウンロードエリア */
+      .preview-section {
+        background-color: var(--fl-blue);
+        padding: calc(var(--sp-96) + 40px) var(--sp-20) var(--sp-64);
+        margin: 0 calc(-1 * var(--sp-20));
+        margin-top: 0;
+        min-height: 400px;
+        position: relative;
+      }
+
+      .arrow-union-white {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 123px;
+        height: 80px;
+        background-image: url("img/Union.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .preview-header {
+        text-align: center;
+        margin-bottom: var(--sp-64);
+      }
+
+      .preview-header h2 {
+        color: var(--fl-white);
+        font-size: 40px;
+        font-weight: 700;
+        margin: 0;
+        font-family: "LINE Seed JP", sans-serif;
+        line-height: 1.4;
+        letter-spacing: 0.05em;
+      }
+
+      .templates-grid {
+        display: grid;
+        gap: var(--sp-48);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .template-item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-32);
+        align-items: center;
+      }
+
+      .template-card {
+        background-color: var(--fl-white);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.15);
+        width: 100%;
+      }
+
+      .template-preview {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        background-color: var(--fl-bg-sub);
+      }
+
+      .template-preview canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .btn-download {
+        background-color: var(--fl-white);
+        color: var(--fl-blue);
+        border: none;
+        padding: var(--sp-16) var(--sp-48);
+        font-size: 18px;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "LINE Seed JP", sans-serif;
+        transition: all 0.2s;
+        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+        min-width: 240px;
+      }
+
+      .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-download:active {
+        transform: translateY(0);
+        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      /* レスポンシブ */
+      @media (min-width: 768px) {
+        body {
+          padding: 0;
+        }
+
+        .container {
+          max-width: none;
+          padding: 0;
+        }
+
+        .header {
+          border-radius: 0;
+          margin: 0;
+          padding: 40px 40px 40px;
+          min-height: 120px;
+        }
+
+        .header h1 {
+          font-size: 44px;
+        }
+
+        .form-section {
+          padding: var(--sp-64) var(--sp-48);
+          padding-bottom: calc(var(--sp-64) + 50px);
+          margin-top: 0;
+        }
+
+        .templates-grid {
+          max-width: 1000px;
+        }
+
+        .preview-header h2 {
+          font-size: 48px;
+        }
+
+        .preview-section {
+          padding: calc(var(--sp-96) + 40px) var(--sp-40) var(--sp-80);
+        }
+      }
+
+      @media (max-width: 767px) {
+        .header {
+          padding: 48px 20px 64px;
+          min-height: 180px;
+        }
+
+        .header h1 {
+          font-size: 24px;
+        }
+
+        .form-section {
+          padding: var(--sp-32) var(--sp-20);
+          padding-bottom: calc(var(--sp-32) + 50px);
+          margin-top: 0;
+        }
+
+        .preview-header h2 {
+          font-size: 32px;
+        }
+
+        .preview-section {
+          padding: calc(var(--sp-64) + 40px) var(--sp-20) var(--sp-48);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- ヘッダー -->
+      <header class="header">
+        <h1>flier Zoom背景ジェネレータ</h1>
+      </header>
+
+      <!-- 入力フォーム -->
+      <section class="form-section">
+        <p class="instruction">
+          以下の項目を入力し、下部のプレビューの中から画像を選びダウンロードしてください。
+        </p>
+
+        <form id="userForm">
+          <div class="form-group">
+            <label class="form-label" for="department"
+              >所属部署名（任意）</label
+            >
+            <input
+              type="text"
+              id="department"
+              class="form-input"
+              placeholder="プロダクト&デザインDivision"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="nameJa">氏名</label>
+            <input
+              type="text"
+              id="nameJa"
+              class="form-input"
+              placeholder="牧瀬 奈緒美"
+              required
+            />
+            <p class="form-hint">氏名の間に半角スペースを空けてください。</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="nameEn">氏名（英語）</label>
+            <input
+              type="text"
+              id="nameEn"
+              class="form-input"
+              placeholder="MAKISE NAOMI"
+              required
+            />
+            <p class="form-hint">氏名の間に半角スペースを空けてください。</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title">肩書き（任意）</label>
+            <input type="text" id="title" class="form-input" placeholder="GM" />
+          </div>
+        </form>
+        <!-- 青い四角の矢印 -->
+        <div class="arrow-rect-blue"></div>
+      </section>
+    </div>
+
+    <!-- プレビュー & ダウンロードエリア -->
+    <section class="preview-section">
+      <!-- 白い矢印 -->
+      <div class="arrow-union-white"></div>
+      <div class="preview-header">
+        <h2>PREVIEW & DOWNLOAD</h2>
+      </div>
+
+      <div class="templates-grid">
+        <!-- テンプレート1: シンプル -->
+        <div class="template-item">
+          <div class="template-card">
+            <div class="template-preview">
+              <canvas id="canvas1" width="1920" height="1080"></canvas>
+            </div>
+          </div>
+          <button
+            class="btn-download"
+            onclick="downloadImage('canvas1', 'zoom-background-1')"
+          >
+            ダウンロード
+          </button>
+        </div>
+
+        <!-- テンプレート2: ビジネス -->
+        <div class="template-item">
+          <div class="template-card">
+            <div class="template-preview">
+              <canvas id="canvas2" width="1920" height="1080"></canvas>
+            </div>
+          </div>
+          <button
+            class="btn-download"
+            onclick="downloadImage('canvas2', 'zoom-background-2')"
+          >
+            ダウンロード
+          </button>
+        </div>
+
+        <!-- テンプレート3: キャッチコピー付き -->
+        <div class="template-item">
+          <div class="template-card">
+            <div class="template-preview">
+              <canvas id="canvas3" width="1920" height="1080"></canvas>
+            </div>
+          </div>
+          <button
+            class="btn-download"
+            onclick="downloadImage('canvas3', 'zoom-background-3')"
+          >
+            ダウンロード
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
