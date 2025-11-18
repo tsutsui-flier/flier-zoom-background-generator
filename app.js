@@ -217,11 +217,16 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
     ctx.drawImage(templateImage, 0, 0, width, height);
   }
 
+  // canvas4は右寄せ、canvas9は白文字
+  const isRightAlign = (canvas.id === "canvas4");
+  const isWhiteText = (canvas.id === "canvas9");
+
   // 左下にテキスト情報を描画（1920x1080基準のスペーシングで"下寄せ"配置）
   const leftMargin = 80;
+  const rightMargin = 80; // 右寄せ時の右端からの距離
   const bottomMargin = 135; // 下辺から135px
   const heights = { ja: 80, en: 32, dept: 32, title: 32 };
-  const gaps = { ja_en: 25, en_dept: 30, dept_title: 10 }; // 漢字氏名と英語氏名の間を15px広げる (10px + 15px = 25px)
+  const gaps = { ja_en: 25, en_dept: 40, dept_title: 20 }; // 所属と肩書きの上に10pxずつ追加
 
   const lines = [];
   if (userData.nameJa) lines.push("ja");
@@ -245,27 +250,52 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
   let y = height - bottomMargin - totalHeight;
   ctx.textBaseline = "alphabetic";
 
+  // テキスト色の設定
+  const textColor = isWhiteText ? "#ffffff" : "#222222";
+
+  // 右寄せの場合、最長テキスト幅を計算してベースX座標を決定
+  let baseX = leftMargin;
+  if (isRightAlign) {
+    let maxWidth = 0;
+    for (const part of lines) {
+      if (part === "ja") {
+        ctx.font = '600 64px "Noto Sans", "Noto Sans JP", sans-serif';
+        maxWidth = Math.max(maxWidth, ctx.measureText(userData.nameJa).width);
+      } else if (part === "en") {
+        ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
+        maxWidth = Math.max(maxWidth, ctx.measureText(userData.nameEn.toUpperCase()).width);
+      } else if (part === "dept") {
+        ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
+        maxWidth = Math.max(maxWidth, ctx.measureText(userData.department).width);
+      } else if (part === "title") {
+        ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
+        maxWidth = Math.max(maxWidth, ctx.measureText(userData.title).width);
+      }
+    }
+    baseX = width - rightMargin - maxWidth;
+  }
+
   for (let i = 0; i < lines.length; i++) {
     const part = lines[i];
     // 進めてから描画（各行の高さ分）
     y += heights[part];
 
     if (part === "ja") {
-      ctx.fillStyle = "#222222";
+      ctx.fillStyle = textColor;
       ctx.font = '600 64px "Noto Sans", "Noto Sans JP", sans-serif';
-      ctx.fillText(userData.nameJa, leftMargin, y);
+      ctx.fillText(userData.nameJa, baseX, y);
     } else if (part === "en") {
-      ctx.fillStyle = "#222222";
+      ctx.fillStyle = textColor;
       ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
-      ctx.fillText(userData.nameEn.toUpperCase(), leftMargin, y);
+      ctx.fillText(userData.nameEn.toUpperCase(), baseX, y);
     } else if (part === "dept") {
-      ctx.fillStyle = "#222222";
+      ctx.fillStyle = textColor;
       ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
-      ctx.fillText(userData.department, leftMargin, y);
+      ctx.fillText(userData.department, baseX, y);
     } else if (part === "title") {
-      ctx.fillStyle = "#222222";
+      ctx.fillStyle = textColor;
       ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
-      ctx.fillText(userData.title, leftMargin, y);
+      ctx.fillText(userData.title, baseX, y);
     }
 
     // 次の行までのギャップ
