@@ -219,8 +219,8 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
 
   // 左下にテキスト情報を描画（1920x1080基準のスペーシングで"下寄せ"配置）
   const leftMargin = 80;
-  const bottomMargin = 100;
-  const heights = { ja: 80, en: 52, dept: 52, title: 52 };
+  const bottomMargin = 135; // 下辺から135px
+  const heights = { ja: 80, en: 32, dept: 32, title: 32 };
   const gaps = { ja_en: 10, en_dept: 30, dept_title: 10 };
 
   const lines = [];
@@ -252,19 +252,19 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
 
     if (part === "ja") {
       ctx.fillStyle = "#222222";
-      ctx.font = '700 60px "Noto Sans", "Noto Sans JP", sans-serif';
+      ctx.font = '600 64px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.nameJa, leftMargin, y);
     } else if (part === "en") {
       ctx.fillStyle = "#222222";
-      ctx.font = '700 34px "Noto Sans", "Noto Sans JP", sans-serif';
+      ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.nameEn.toUpperCase(), leftMargin, y);
     } else if (part === "dept") {
       ctx.fillStyle = "#222222";
-      ctx.font = '700 28px "Noto Sans", "Noto Sans JP", sans-serif';
+      ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.department, leftMargin, y);
     } else if (part === "title") {
       ctx.fillStyle = "#222222";
-      ctx.font = '700 28px "Noto Sans", "Noto Sans JP", sans-serif';
+      ctx.font = '600 32px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.title, leftMargin, y);
     }
 
