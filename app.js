@@ -343,6 +343,7 @@ function downloadImage(canvasId, filename) {
   const tempCanvas = document.createElement("canvas");
   tempCanvas.width = canvas.width;
   tempCanvas.height = canvas.height;
+  tempCanvas.id = canvasId; // canvas IDを設定して、generateTemplate内で正しく判定できるようにする
 
   console.log("Canvas サイズ:", tempCanvas.width, "x", tempCanvas.height);
 
