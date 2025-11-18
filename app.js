@@ -221,7 +221,7 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
   const leftMargin = 80;
   const bottomMargin = 135; // 下辺から135px
   const heights = { ja: 80, en: 32, dept: 32, title: 32 };
-  const gaps = { ja_en: 10, en_dept: 30, dept_title: 10 };
+  const gaps = { ja_en: 25, en_dept: 30, dept_title: 10 }; // 漢字氏名と英語氏名の間を15px広げる (10px + 15px = 25px)
 
   const lines = [];
   if (userData.nameJa) lines.push("ja");
