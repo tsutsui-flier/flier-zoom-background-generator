@@ -206,7 +206,7 @@ function updateAllPreviews() {
   generateTemplate(canvas9, userData, images.template_9, images.previewPerson9, true);
 }
 
-// 汎用テンプレート生成関数（背景画像 + プレビュー用人物イラスト）
+// 汎用テンプレート生成関数（背景画像 + テキスト + プレビュー用人物イラスト）
 function generateTemplate(canvas, userData, templateImage, previewPersonImage, isPreview = false) {
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
@@ -215,6 +215,66 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
   // 背景画像を描画
   if (templateImage && templateImage.complete) {
     ctx.drawImage(templateImage, 0, 0, width, height);
+  }
+
+  // 左下にテキスト情報を描画（1920x1080基準のスペーシングで"下寄せ"配置）
+  const leftMargin = 80;
+  const bottomMargin = 100;
+  const heights = { ja: 80, en: 52, dept: 52, title: 52 };
+  const gaps = { ja_en: 10, en_dept: 30, dept_title: 10 };
+
+  const lines = [];
+  if (userData.nameJa) lines.push("ja");
+  if (userData.nameEn) lines.push("en");
+  if (userData.department) lines.push("dept");
+  if (userData.title) lines.push("title");
+
+  // 総ブロック高を計算して下寄せ開始位置を決定
+  let totalHeight = 0;
+  for (let i = 0; i < lines.length; i++) {
+    totalHeight += heights[lines[i]];
+    const next = lines[i + 1];
+    if (!next) continue;
+    if (lines[i] === "ja" && next === "en") totalHeight += gaps.ja_en;
+    else if ((lines[i] === "ja" || lines[i] === "en") && next === "dept")
+      totalHeight += gaps.en_dept;
+    else if (lines[i] === "dept" && next === "title")
+      totalHeight += gaps.dept_title;
+  }
+
+  let y = height - bottomMargin - totalHeight;
+  ctx.textBaseline = "alphabetic";
+
+  for (let i = 0; i < lines.length; i++) {
+    const part = lines[i];
+    // 進めてから描画（各行の高さ分）
+    y += heights[part];
+
+    if (part === "ja") {
+      ctx.fillStyle = "#222222";
+      ctx.font = '700 60px "LINE Seed JP", sans-serif';
+      ctx.fillText(userData.nameJa, leftMargin, y);
+    } else if (part === "en") {
+      ctx.fillStyle = "#222222";
+      ctx.font = '400 34px "LINE Seed JP", sans-serif';
+      ctx.fillText(userData.nameEn.toUpperCase(), leftMargin, y);
+    } else if (part === "dept") {
+      ctx.fillStyle = "#222222";
+      ctx.font = '400 28px "LINE Seed JP", sans-serif';
+      ctx.fillText(userData.department, leftMargin, y);
+    } else if (part === "title") {
+      ctx.fillStyle = "#222222";
+      ctx.font = '400 28px "LINE Seed JP", sans-serif';
+      ctx.fillText(userData.title, leftMargin, y);
+    }
+
+    // 次の行までのギャップ
+    const next = lines[i + 1];
+    if (!next) break;
+    if (part === "ja" && next === "en") y += gaps.ja_en;
+    else if ((part === "ja" || part === "en") && next === "dept")
+      y += gaps.en_dept;
+    else if (part === "dept" && next === "title") y += gaps.dept_title;
   }
 
   // プレビュー時のみ対応する人物イラストを中央下部に配置
