@@ -252,19 +252,19 @@ function generateTemplate(canvas, userData, templateImage, previewPersonImage, i
 
     if (part === "ja") {
       ctx.fillStyle = "#222222";
-      ctx.font = '700 60px "LINE Seed JP", sans-serif';
+      ctx.font = '700 60px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.nameJa, leftMargin, y);
     } else if (part === "en") {
       ctx.fillStyle = "#222222";
-      ctx.font = '400 34px "LINE Seed JP", sans-serif';
+      ctx.font = '700 34px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.nameEn.toUpperCase(), leftMargin, y);
     } else if (part === "dept") {
       ctx.fillStyle = "#222222";
-      ctx.font = '400 28px "LINE Seed JP", sans-serif';
+      ctx.font = '700 28px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.department, leftMargin, y);
     } else if (part === "title") {
       ctx.fillStyle = "#222222";
-      ctx.font = '400 28px "LINE Seed JP", sans-serif';
+      ctx.font = '700 28px "Noto Sans", "Noto Sans JP", sans-serif';
       ctx.fillText(userData.title, leftMargin, y);
     }
 

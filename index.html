@@ -4,29 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>flier Zoom背景ジェネレータ</title>
-    <style>
-      /* LINE Seed JP フォントの読み込み */
-      @font-face {
-        font-family: "LINE Seed JP";
-        src: url("font/LINESeedJP_OTF_Bd.otf") format("opentype");
-        font-weight: 700;
-        font-style: normal;
-      }
-
-      @font-face {
-        font-family: "LINE Seed JP";
-        src: url("font/LINESeedJP_OTF_Rg.otf") format("opentype");
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      @font-face {
-        font-family: "LINE Seed JP";
-        src: url("font/LINESeedJP_OTF_Th.otf") format("opentype");
-        font-weight: 300;
-        font-style: normal;
-      }
-    </style>
+    <!-- Google Fonts: Noto Sans & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
     <!-- 外部CSSはインラインスタイルの後に読み込み、Cascadingで上書きできるようにする -->
     <link rel="stylesheet" href="flieruistyleguide.css" />
     <style>
@@ -40,7 +21,7 @@
         background-color: var(--fl-bg-main);
         min-height: 100vh;
         padding: var(--sp-40) var(--sp-20);
-        font-family: "LINE Seed JP", -apple-system, BlinkMacSystemFont,
+        font-family: "Noto Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
           sans-serif;
       }
 
@@ -64,7 +45,7 @@
       }
 
       .header h1 {
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
         font-size: 32px;
         font-weight: 700;
         margin: 0;
@@ -103,7 +84,7 @@
         color: var(--fl-fore-sub);
         margin-bottom: var(--sp-32);
         line-height: 1.7;
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
       }
 
       .form-group {
@@ -116,7 +97,7 @@
         font-weight: 700;
         color: var(--fl-fore-main);
         margin-bottom: var(--sp-8);
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
       }
 
       .form-input {
@@ -125,7 +106,7 @@
         font-size: 15px;
         border: 1px solid var(--fl-bg-border);
         border-radius: 4px;
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
         transition: border-color 0.2s;
       }
 
@@ -142,7 +123,7 @@
         font-size: 12px;
         color: var(--fl-fore-remark);
         margin-top: var(--sp-4);
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
       }
 
       /* プレビュー & ダウンロードエリア */
@@ -178,7 +159,7 @@
         font-size: 40px;
         font-weight: 700;
         margin: 0;
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
         line-height: 1.4;
         letter-spacing: 0.05em;
       }
@@ -230,7 +211,7 @@
         font-weight: 700;
         border-radius: 8px;
         cursor: pointer;
-        font-family: "LINE Seed JP", sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", sans-serif;
         transition: all 0.2s;
         box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
         min-width: 240px;
