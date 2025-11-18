@@ -26,13 +26,19 @@ const images = {
   template_7: new Image(),
   template_8: new Image(),
   template_9: new Image(),
-  previewPersonA: new Image(),
-  previewPersonB: new Image(),
-  previewPersonC: new Image(),
+  previewPerson1: new Image(),
+  previewPerson2: new Image(),
+  previewPerson3: new Image(),
+  previewPerson4: new Image(),
+  previewPerson5: new Image(),
+  previewPerson6: new Image(),
+  previewPerson7: new Image(),
+  previewPerson8: new Image(),
+  previewPerson9: new Image(),
 };
 
 let imagesLoaded = 0;
-const totalImages = 12;
+const totalImages = 18;
 
 // 初期値を入力欄へ反映（空欄のみ）。英語名は大文字化
 function applyDefaultValuesIfEmpty() {
@@ -106,20 +112,50 @@ images.template_9.onload = onImageLoad;
 images.template_9.onerror = onImageError("template_9.png");
 images.template_9.src = "img/template_9.png";
 
-images.previewPersonA.onload = onImageLoad;
-images.previewPersonA.onerror = onImageError("Image1 Container.svg");
-images.previewPersonA.src =
+images.previewPerson1.onload = onImageLoad;
+images.previewPerson1.onerror = onImageError("Image1 Container.svg");
+images.previewPerson1.src =
   "img/Image1 Container_ダウンロードする中には含めないでください.svg";
 
-images.previewPersonB.onload = onImageLoad;
-images.previewPersonB.onerror = onImageError("Image2 Container.svg");
-images.previewPersonB.src =
+images.previewPerson2.onload = onImageLoad;
+images.previewPerson2.onerror = onImageError("Image2 Container.svg");
+images.previewPerson2.src =
   "img/Image2 Container_ダウンロードする中には含めないでください.svg";
 
-images.previewPersonC.onload = onImageLoad;
-images.previewPersonC.onerror = onImageError("Image3 Container.svg");
-images.previewPersonC.src =
+images.previewPerson3.onload = onImageLoad;
+images.previewPerson3.onerror = onImageError("Image3 Container.svg");
+images.previewPerson3.src =
   "img/Image3 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson4.onload = onImageLoad;
+images.previewPerson4.onerror = onImageError("Image4 Container.svg");
+images.previewPerson4.src =
+  "img/Image4 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson5.onload = onImageLoad;
+images.previewPerson5.onerror = onImageError("Image5 Container.svg");
+images.previewPerson5.src =
+  "img/Image5 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson6.onload = onImageLoad;
+images.previewPerson6.onerror = onImageError("Image6 Container.svg");
+images.previewPerson6.src =
+  "img/Image6 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson7.onload = onImageLoad;
+images.previewPerson7.onerror = onImageError("Image7 Container.svg");
+images.previewPerson7.src =
+  "img/Image7 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson8.onload = onImageLoad;
+images.previewPerson8.onerror = onImageError("Image8 Container.svg");
+images.previewPerson8.src =
+  "img/Image8 Container_ダウンロードする中には含めないでください.svg";
+
+images.previewPerson9.onload = onImageLoad;
+images.previewPerson9.onerror = onImageError("Image9 Container.svg");
+images.previewPerson9.src =
+  "img/Image9 Container_ダウンロードする中には含めないでください.svg";
 
 // 英語名は入力中に常に大文字へ正規化（カーソル位置を維持）
 nameEnInput.addEventListener("input", () => {
@@ -159,19 +195,19 @@ function updateAllPreviews() {
     title: trim(titleInput),
   };
 
-  generateTemplate(canvas1, userData, images.template_1, true);
-  generateTemplate(canvas2, userData, images.template_2, true);
-  generateTemplate(canvas3, userData, images.template_3, true);
-  generateTemplate(canvas4, userData, images.template_4, true);
-  generateTemplate(canvas5, userData, images.template_5, true);
-  generateTemplate(canvas6, userData, images.template_6, true);
-  generateTemplate(canvas7, userData, images.template_7, true);
-  generateTemplate(canvas8, userData, images.template_8, true);
-  generateTemplate(canvas9, userData, images.template_9, true);
+  generateTemplate(canvas1, userData, images.template_1, images.previewPerson1, true);
+  generateTemplate(canvas2, userData, images.template_2, images.previewPerson2, true);
+  generateTemplate(canvas3, userData, images.template_3, images.previewPerson3, true);
+  generateTemplate(canvas4, userData, images.template_4, images.previewPerson4, true);
+  generateTemplate(canvas5, userData, images.template_5, images.previewPerson5, true);
+  generateTemplate(canvas6, userData, images.template_6, images.previewPerson6, true);
+  generateTemplate(canvas7, userData, images.template_7, images.previewPerson7, true);
+  generateTemplate(canvas8, userData, images.template_8, images.previewPerson8, true);
+  generateTemplate(canvas9, userData, images.template_9, images.previewPerson9, true);
 }
 
-// 汎用テンプレート生成関数（背景画像のみを描画）
-function generateTemplate(canvas, userData, templateImage, isPreview = false) {
+// 汎用テンプレート生成関数（背景画像 + プレビュー用人物イラスト）
+function generateTemplate(canvas, userData, templateImage, previewPersonImage, isPreview = false) {
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
@@ -181,10 +217,10 @@ function generateTemplate(canvas, userData, templateImage, isPreview = false) {
     ctx.drawImage(templateImage, 0, 0, width, height);
   }
 
-  // プレビュー時のみ人物イラストを中央下部に配置
-  if (isPreview && images.previewPersonA.complete) {
-    const imgW = images.previewPersonA.width;
-    const imgH = images.previewPersonA.height;
+  // プレビュー時のみ対応する人物イラストを中央下部に配置
+  if (isPreview && previewPersonImage && previewPersonImage.complete) {
+    const imgW = previewPersonImage.width;
+    const imgH = previewPersonImage.height;
     const maxW = width * 0.9;
     const maxH = height * 0.9;
     const scale = Math.min(maxW / imgW, maxH / imgH);
@@ -193,7 +229,7 @@ function generateTemplate(canvas, userData, templateImage, isPreview = false) {
     const personX = (width - personWidth) / 2;
     const personY = height - personHeight;
     ctx.drawImage(
-      images.previewPersonA,
+      previewPersonImage,
       personX,
       personY,
       personWidth,
@@ -240,12 +276,12 @@ function downloadImage(canvasId, filename) {
     canvas9: images.template_9,
   };
 
-  // プレビューなしで再生成（isPreview = false）
+  // プレビューなしで再生成（isPreview = false、人物イラストなし）
   try {
     const templateImage = templateMap[canvasId];
     if (templateImage) {
       console.log(`テンプレート${canvasId}生成開始`);
-      generateTemplate(tempCanvas, userData, templateImage, false);
+      generateTemplate(tempCanvas, userData, templateImage, null, false);
     }
 
     console.log("Canvas描画完了、ダウンロード準備中");
