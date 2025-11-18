@@ -8,19 +8,31 @@ const titleInput = document.getElementById("title");
 const canvas1 = document.getElementById("canvas1");
 const canvas2 = document.getElementById("canvas2");
 const canvas3 = document.getElementById("canvas3");
+const canvas4 = document.getElementById("canvas4");
+const canvas5 = document.getElementById("canvas5");
+const canvas6 = document.getElementById("canvas6");
+const canvas7 = document.getElementById("canvas7");
+const canvas8 = document.getElementById("canvas8");
+const canvas9 = document.getElementById("canvas9");
 
 // 画像のプリロード
 const images = {
-  templateA_bg: new Image(),
-  templateB_bg: new Image(),
-  templateC_bg: new Image(),
+  template_1: new Image(),
+  template_2: new Image(),
+  template_3: new Image(),
+  template_4: new Image(),
+  template_5: new Image(),
+  template_6: new Image(),
+  template_7: new Image(),
+  template_8: new Image(),
+  template_9: new Image(),
   previewPersonA: new Image(),
   previewPersonB: new Image(),
   previewPersonC: new Image(),
 };
 
 let imagesLoaded = 0;
-const totalImages = 6;
+const totalImages = 12;
 
 // 初期値を入力欄へ反映（空欄のみ）。英語名は大文字化
 function applyDefaultValuesIfEmpty() {
@@ -58,17 +70,41 @@ function onImageError(imageName) {
 }
 
 // 画像の読み込み
-images.templateA_bg.onload = onImageLoad;
-images.templateA_bg.onerror = onImageError("templateA_bg.png");
-images.templateA_bg.src = "img/templateA_bg.png";
+images.template_1.onload = onImageLoad;
+images.template_1.onerror = onImageError("template_1.png");
+images.template_1.src = "img/template_1.png";
 
-images.templateB_bg.onload = onImageLoad;
-images.templateB_bg.onerror = onImageError("templateB_bg.png");
-images.templateB_bg.src = "img/templateB_bg.png";
+images.template_2.onload = onImageLoad;
+images.template_2.onerror = onImageError("template_2.png");
+images.template_2.src = "img/template_2.png";
 
-images.templateC_bg.onload = onImageLoad;
-images.templateC_bg.onerror = onImageError("templateC_bg.png");
-images.templateC_bg.src = "img/templateC_bg.png";
+images.template_3.onload = onImageLoad;
+images.template_3.onerror = onImageError("template_3.png");
+images.template_3.src = "img/template_3.png";
+
+images.template_4.onload = onImageLoad;
+images.template_4.onerror = onImageError("template_4.png");
+images.template_4.src = "img/template_4.png";
+
+images.template_5.onload = onImageLoad;
+images.template_5.onerror = onImageError("template_5.png");
+images.template_5.src = "img/template_5.png";
+
+images.template_6.onload = onImageLoad;
+images.template_6.onerror = onImageError("template_6.png");
+images.template_6.src = "img/template_6.png";
+
+images.template_7.onload = onImageLoad;
+images.template_7.onerror = onImageError("template_7.png");
+images.template_7.src = "img/template_7.png";
+
+images.template_8.onload = onImageLoad;
+images.template_8.onerror = onImageError("template_8.png");
+images.template_8.src = "img/template_8.png";
+
+images.template_9.onload = onImageLoad;
+images.template_9.onerror = onImageError("template_9.png");
+images.template_9.src = "img/template_9.png";
 
 images.previewPersonA.onload = onImageLoad;
 images.previewPersonA.onerror = onImageError("Image1 Container.svg");
@@ -123,79 +159,34 @@ function updateAllPreviews() {
     title: trim(titleInput),
   };
 
-  generateTemplate1(canvas1, userData, true);
-  generateTemplate2(canvas2, userData, true);
-  generateTemplate3(canvas3, userData, true);
+  generateTemplate(canvas1, userData, images.template_1, true);
+  generateTemplate(canvas2, userData, images.template_2, true);
+  generateTemplate(canvas3, userData, images.template_3, true);
+  generateTemplate(canvas4, userData, images.template_4, true);
+  generateTemplate(canvas5, userData, images.template_5, true);
+  generateTemplate(canvas6, userData, images.template_6, true);
+  generateTemplate(canvas7, userData, images.template_7, true);
+  generateTemplate(canvas8, userData, images.template_8, true);
+  generateTemplate(canvas9, userData, images.template_9, true);
 }
 
-// テンプレートA: シンプル（左上にテキスト、右下にロゴ）
-function generateTemplate1(canvas, userData, isPreview = false) {
+// 汎用テンプレート生成関数（背景画像のみを描画）
+function generateTemplate(canvas, userData, templateImage, isPreview = false) {
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
 
   // 背景画像を描画
-  ctx.drawImage(images.templateA_bg, 0, 0, width, height);
-
-  // 左上にテキスト情報
-  const leftMargin = 80;
-  const topStart = 160; // 基準ライン（中央揃え用）
-  ctx.textBaseline = "middle";
-
-  // 氏名（日本語）と（英語）を横並び、上下中央揃え
-  let drewNameRow = false;
-  let currentX = leftMargin;
-  if (userData.nameJa) {
-    ctx.fillStyle = "#222222";
-    ctx.font = '700 60px "LINE Seed JP", sans-serif';
-    const jaText = userData.nameJa;
-    const jaWidth = ctx.measureText(jaText).width;
-    ctx.fillText(jaText, currentX, topStart);
-    currentX += jaWidth;
-    drewNameRow = true;
-  }
-
-  // 名称間の間隔（Figmaバランスに寄せた見栄え）
-  const nameGap = 40;
-  if (userData.nameJa && userData.nameEn) {
-    currentX += nameGap;
-  }
-
-  if (userData.nameEn) {
-    ctx.fillStyle = "#222222";
-    ctx.font = '400 42px "LINE Seed JP", sans-serif';
-    const enText = userData.nameEn.toUpperCase();
-    // 日本語名がなければ左から描画
-    if (!userData.nameJa) currentX = leftMargin;
-    ctx.fillText(enText, currentX, topStart);
-    drewNameRow = true;
-  }
-
-  // 部署名と肩書きを1行に
-  let infoLine = "";
-  if (userData.department) {
-    infoLine += userData.department;
-  }
-  if (userData.title) {
-    if (infoLine) infoLine += " ";
-    infoLine += userData.title;
-  }
-  if (infoLine) {
-    ctx.fillStyle = "#222222";
-    ctx.font = '400 34px "LINE Seed JP", sans-serif';
-    // 氏名行の下に十分な余白を空けて配置
-    ctx.textBaseline = "alphabetic";
-    const infoY = drewNameRow ? topStart + 110 : topStart;
-    ctx.fillText(infoLine, leftMargin, infoY);
+  if (templateImage && templateImage.complete) {
+    ctx.drawImage(templateImage, 0, 0, width, height);
   }
 
   // プレビュー時のみ人物イラストを中央下部に配置
   if (isPreview && images.previewPersonA.complete) {
-    // 大きめに（最大100%）かつアスペクト比維持、中央下部固定
     const imgW = images.previewPersonA.width;
     const imgH = images.previewPersonA.height;
-    const maxW = width * 1.0;
-    const maxH = height * 1.0;
+    const maxW = width * 0.9;
+    const maxH = height * 0.9;
     const scale = Math.min(maxW / imgW, maxH / imgH);
     const personWidth = imgW * scale;
     const personHeight = imgH * scale;
@@ -203,125 +194,6 @@ function generateTemplate1(canvas, userData, isPreview = false) {
     const personY = height - personHeight;
     ctx.drawImage(
       images.previewPersonA,
-      personX,
-      personY,
-      personWidth,
-      personHeight
-    );
-  }
-}
-
-// テンプレートB: ビジネススタイル（左上にロゴ、右下にページめくり）
-function generateTemplate2(canvas, userData, isPreview = false) {
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width;
-  const height = canvas.height;
-
-  // 背景画像を描画
-  ctx.drawImage(images.templateB_bg, 0, 0, width, height);
-
-  // テキスト情報は表示しない（テンプレートBはロゴのみ）
-
-  // プレビュー時のみ人物イラストを中央下部に配置
-  if (isPreview && images.previewPersonB.complete) {
-    const imgW = images.previewPersonB.width;
-    const imgH = images.previewPersonB.height;
-    const maxW = width * 0.9;
-    const maxH = height * 0.9;
-    const scale = Math.min(maxW / imgW, maxH / imgH);
-    const personWidth = imgW * scale;
-    const personHeight = imgH * scale;
-    const personX = (width - personWidth) / 2;
-    const personY = height - personHeight;
-    ctx.drawImage(
-      images.previewPersonB,
-      personX,
-      personY,
-      personWidth,
-      personHeight
-    );
-  }
-}
-
-// テンプレートC: キャッチコピー付き（左上にロゴ、右上に縦書き、左下にテキスト）
-function generateTemplate3(canvas, userData, isPreview = false) {
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width;
-  const height = canvas.height;
-
-  // 背景画像を描画
-  ctx.drawImage(images.templateC_bg, 0, 0, width, height);
-
-  // 左下テキスト（1920x1080基準のスペーシングで"下寄せ"配置）
-  const leftMargin = 80;
-  const bottomMargin = 100;
-  const heights = { ja: 80, en: 52, dept: 52, title: 52 };
-  const gaps = { ja_en: 10, en_dept: 30, dept_title: 10 };
-
-  const lines = [];
-  if (userData.nameJa) lines.push("ja");
-  if (userData.nameEn) lines.push("en");
-  if (userData.department) lines.push("dept");
-  if (userData.title) lines.push("title");
-
-  // 総ブロック高を計算して下寄せ開始位置を決定
-  let totalHeight = 0;
-  for (let i = 0; i < lines.length; i++) {
-    totalHeight += heights[lines[i]];
-    const next = lines[i + 1];
-    if (!next) continue;
-    if (lines[i] === "ja" && next === "en") totalHeight += gaps.ja_en;
-    else if ((lines[i] === "ja" || lines[i] === "en") && next === "dept")
-      totalHeight += gaps.en_dept;
-    else if (lines[i] === "dept" && next === "title")
-      totalHeight += gaps.dept_title;
-  }
-  let y = height - bottomMargin - totalHeight;
-  for (let i = 0; i < lines.length; i++) {
-    const part = lines[i];
-    // 進めてから描画（各行の高さ分）
-    y += heights[part];
-
-    if (part === "ja") {
-      ctx.fillStyle = "#222222";
-      ctx.font = '700 60px "LINE Seed JP", sans-serif';
-      ctx.fillText(userData.nameJa, leftMargin, y);
-    } else if (part === "en") {
-      ctx.fillStyle = "#222222";
-      ctx.font = '400 34px "LINE Seed JP", sans-serif';
-      ctx.fillText(userData.nameEn.toUpperCase(), leftMargin, y);
-    } else if (part === "dept") {
-      ctx.fillStyle = "#222222";
-      ctx.font = '400 28px "LINE Seed JP", sans-serif';
-      ctx.fillText(userData.department, leftMargin, y);
-    } else if (part === "title") {
-      ctx.fillStyle = "#222222";
-      ctx.font = '400 28px "LINE Seed JP", sans-serif';
-      ctx.fillText(userData.title, leftMargin, y);
-    }
-
-    // 次の行までのギャップ
-    const next = lines[i + 1];
-    if (!next) break;
-    if (part === "ja" && next === "en") y += gaps.ja_en;
-    else if ((part === "ja" || part === "en") && next === "dept")
-      y += gaps.en_dept; // 添付準拠: 30px
-    else if (part === "dept" && next === "title") y += gaps.dept_title;
-  }
-
-  // プレビュー時のみ人物イラストを中央下部に配置
-  if (isPreview && images.previewPersonC.complete) {
-    const imgW = images.previewPersonC.width;
-    const imgH = images.previewPersonC.height;
-    const maxW = width * 0.9;
-    const maxH = height * 0.9;
-    const scale = Math.min(maxW / imgW, maxH / imgH);
-    const personWidth = imgW * scale;
-    const personHeight = imgH * scale;
-    const personX = (width - personWidth) / 2;
-    const personY = height - personHeight;
-    ctx.drawImage(
-      images.previewPersonC,
       personX,
       personY,
       personWidth,
@@ -340,11 +212,6 @@ function downloadImage(canvasId, filename) {
 
   console.log("ダウンロード開始:", canvasId, filename);
   console.log("画像読み込み状態:", imagesLoaded, "/", totalImages);
-  console.log("背景画像の状態:", {
-    templateA: images.templateA_bg.complete,
-    templateB: images.templateB_bg.complete,
-    templateC: images.templateC_bg.complete,
-  });
 
   const canvas = document.getElementById(canvasId);
   const tempCanvas = document.createElement("canvas");
@@ -360,17 +227,25 @@ function downloadImage(canvasId, filename) {
     title: titleInput.value || titleInput.placeholder,
   };
 
+  // テンプレート画像のマッピング
+  const templateMap = {
+    canvas1: images.template_1,
+    canvas2: images.template_2,
+    canvas3: images.template_3,
+    canvas4: images.template_4,
+    canvas5: images.template_5,
+    canvas6: images.template_6,
+    canvas7: images.template_7,
+    canvas8: images.template_8,
+    canvas9: images.template_9,
+  };
+
   // プレビューなしで再生成（isPreview = false）
   try {
-    if (canvasId === "canvas1") {
-      console.log("テンプレートA生成開始");
-      generateTemplate1(tempCanvas, userData, false);
-    } else if (canvasId === "canvas2") {
-      console.log("テンプレートB生成開始");
-      generateTemplate2(tempCanvas, userData, false);
-    } else if (canvasId === "canvas3") {
-      console.log("テンプレートC生成開始");
-      generateTemplate3(tempCanvas, userData, false);
+    const templateImage = templateMap[canvasId];
+    if (templateImage) {
+      console.log(`テンプレート${canvasId}生成開始`);
+      generateTemplate(tempCanvas, userData, templateImage, false);
     }
 
     console.log("Canvas描画完了、ダウンロード準備中");
