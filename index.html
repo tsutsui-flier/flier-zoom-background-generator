@@ -7,9 +7,12 @@
     <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="apple-touch-icon" href="img/favicon.png" />
     <!-- Google Fonts: Noto Sans & Noto Sans JP -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <!-- 外部CSSはインラインスタイルの後に読み込み、Cascadingで上書きできるようにする -->
     <link rel="stylesheet" href="flieruistyleguide.css" />
     <style>
@@ -23,8 +26,8 @@
         background-color: var(--fl-bg-main);
         min-height: 100vh;
         padding: var(--sp-40) var(--sp-20);
-        font-family: "Noto Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
-          sans-serif;
+        font-family: "Noto Sans", "Noto Sans JP", -apple-system,
+          BlinkMacSystemFont, sans-serif;
       }
 
       .container {
@@ -336,7 +339,7 @@
 
           <div class="form-group">
             <label class="form-label" for="department"
-              >所属部署名（任意）</label
+              >所属部署名・肩書き１行目（任意）</label
             >
             <input
               type="text"
@@ -347,7 +350,9 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="title">肩書き（任意）</label>
+            <label class="form-label" for="title"
+              >所属部署名・肩書き２行目（任意）</label
+            >
             <input type="text" id="title" class="form-input" placeholder="GM" />
           </div>
         </form>
