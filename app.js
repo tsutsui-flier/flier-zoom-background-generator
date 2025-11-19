@@ -347,11 +347,13 @@ function downloadImage(canvasId, filename) {
 
   console.log("Canvas サイズ:", tempCanvas.width, "x", tempCanvas.height);
 
+  // プレビューと同じく、trim()で空欄チェック（プレースホルダーは使用しない）
+  const trim = (el) => (el.value || "").trim();
   const userData = {
-    department: departmentInput.value || departmentInput.placeholder,
-    nameJa: nameJaInput.value || nameJaInput.placeholder,
-    nameEn: nameEnInput.value || nameEnInput.placeholder,
-    title: titleInput.value || titleInput.placeholder,
+    department: trim(departmentInput),
+    nameJa: trim(nameJaInput),
+    nameEn: trim(nameEnInput),
+    title: trim(titleInput),
   };
 
   // テンプレート画像のマッピング
